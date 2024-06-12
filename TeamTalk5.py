@@ -1757,3 +1757,4 @@ class TeamTalk(object):
 
     def onSoundDeviceNewDefaultOutputComDevice(self, sounddevice: SoundDevice):
         pass
+#mod safe-acid

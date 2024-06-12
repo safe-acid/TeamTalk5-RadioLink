@@ -11,8 +11,12 @@ class Config:
     ChannelPassword = ""
     
     #Other settings
-    audioInputID = 6    #Virtual audio input
-    max_volume = 50     #Max default volume
+    audioInputID = 6        #Virtual audio input                        - INT 
+    max_volume = 50         #Max default volume                         - INT 
+    admin = True            #Admin could change/add stations            - Boolean
+    operator = True         #Chanel operatoor could change/add stations - Boolean
+    registered_user = True  #Requstered user could change/add stations  - Boolean
+    
     
     
     #Example

@@ -1,3 +1,4 @@
+#
 class Config:
     #Login settings
     host = "46.36.217.170"

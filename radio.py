@@ -33,9 +33,8 @@ except OSError as e:
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
- 
 from sdk.Library.TeamTalkPy import TeamTalk5
-from TeamTalk5 import *
+from sdk.Library.TeamTalkPy.TeamTalk5 import *
 
 class TTClient:
     def __init__(self, host, tcpPort, udpPort, nickName, userName, password):

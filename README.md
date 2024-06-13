@@ -14,7 +14,7 @@ python setup.py
 ### Preparation before start
 * Define Audio Device ID by running the command
 
-<b> <color = "blue"> python radio.py --devices</b>
+<b> <span> python radio.py --devices</span></b>
 
 * Save your Audio ID and server's settings in config.py
 
@@ -31,3 +31,10 @@ python radio.py --language ru
 
 
 Good Luck - Котяра🐈‍⬛
+
+
+<style>
+    span {
+  color: blue;
+}
+</style>

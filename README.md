@@ -1,5 +1,5 @@
 # TeamTalk5-ttRadio
-This is a simple radio player for TeamTalk5 with predefined radio stations, use yours stations as youo wish
+This is a simple radio player for TeamTalk5 with predefined radio stations. Use your own stations as you wish. The bot will reconnect automatically if the server is rebooted.
 
 ### Minimum requirements:
 * Windows 10/11       x64
@@ -34,6 +34,6 @@ python radio.py --language ru
 
 
 
-Good Luck - Котяра🐈‍⬛
+Good Luck - Котяра 🐾
 
 

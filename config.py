@@ -1,24 +1,25 @@
-#
 class Config:
+    version = "1.0"
+    
     #Login settings
     host = "46.36.217.170"
     tcpPort = 10555
     udpPort = 10555
-    botName = "_radioFM"
+    botName = "_botRadioFM"
     username = "open"
     password = "open"
     ChannelName = "/_Audio bot"
     ChannelPassword = ""
     
     #Other settings
-    audioInputID = 6        #Virtual audio input                        - INT 
-    max_volume = 50         #Max default volume                         - INT 
-    admin = True            #Admin could change/add stations            - Boolean
-    operator = True         #Chanel operatoor could change/add stations - Boolean
-    registered_user = True  #Requstered user could change/add stations  - Boolean
-    
-    
-    
+    #Audio Device ID - INT 
+    audioInputID = 3  
+    #Max default volume - INT     
+    max_volume = 50 
+    #Admin could change/add stations, default -> registered user - Boolean        
+    admin = False           
+
+
     #Example
     # host = "46.36.217.170"
     # tcpPort = 10555

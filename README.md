@@ -12,8 +12,9 @@ This is a simple radio player for TeamTalk5 with predefined radio stations, use 
 
 python setup.py
 ### Preparation before start
-* Define Audio Device ID by running the command;
-python radio.py --devices
+* Define Audio Device ID by running the command
+
+<b>python radio.py --devices</b>
 
 * Save your Audio ID and server's settings in config.py
 

@@ -1,3 +1,8 @@
+<style>
+    span {
+  color: blue;
+}
+</style>
 # TeamTalk5-ttRadio
 This is a simple radio player for TeamTalk5 with predefined radio stations, use yours stations as youo wish
 
@@ -33,8 +38,3 @@ python radio.py --language ru
 Good Luck - Котяра🐈‍⬛
 
 
-<style>
-    span {
-  color: blue;
-}
-</style>

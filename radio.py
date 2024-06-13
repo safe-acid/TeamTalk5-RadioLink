@@ -3,7 +3,7 @@ import stations, radio_user
 from config import Config as conf
 from typing import Optional
 from messages import messages
-from vlc_player import VLCPlayer as vlc
+from vlc_player import VLCPlayer
 
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -53,7 +53,7 @@ class TTClient:
         self.reconnect_delay =  10 # Set reconnect interval to 10 seconds
         self.reconnect_thread = threading.Thread(target=self.reconnect_loop, daemon=True)
         self.reconnect_thread.start()
-        self.vlc = vlc()
+        self.vlc = VLCPlayer()
         
     
         

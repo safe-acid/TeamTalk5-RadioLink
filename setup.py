@@ -1,10 +1,10 @@
 import os
 import platform
-import subprocess
 import sys
 import requests
 from urllib.parse import urljoin
 import shutil
+import py7zr
 
 # Define base URL and list of file names (modify if needed)
 BASE_URL = "http://www.bearware.dk/teamtalksdk/v5.15a/"
@@ -14,23 +14,6 @@ FILE_NAMES = {
     "Windows": "tt5sdk_v5.15a_win64.7z"
 }
 
-def install_requirements():
-    """Install Python packages from requirements.txt."""
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
-
-def install_p7zip():
-    """Install p7zip based on the operating system."""
-    if platform.system() == "Linux":
-        print("Installing p7zip on Linux...")
-        #subprocess.check_call(["sudo", "apt-get", "update"])
-        subprocess.check_call(["sudo", "apt-get", "install", "-y", "p7zip-full"])
-    elif platform.system() == "Darwin":
-        print("Installing p7zip on macOS...")
-        #subprocess.check_call(["brew", "update"])
-        subprocess.check_call(["brew", "install", "p7zip"])
-    else:
-        print(f"Unsupported OS type: {platform.system()}")
-        sys.exit(1)
 
 def download_file(url, filename):
     """Downloads a file from the specified URL and saves it locally."""
@@ -42,11 +25,12 @@ def download_file(url, filename):
             f.write(chunk)
     print(f"Downloaded {filename} successfully.")
 
+
 def extract_archive(filename, extract_dir):
-    """Extracts the contents of an archive to the specified directory."""
+    """Extracts the contents of an archive to the specified directory using py7zr."""
     os.makedirs(extract_dir, exist_ok=True)  # Create extraction directory if needed
-    # Use subprocess to call 7z for extraction
-    subprocess.check_call(["7z", "x", filename, f"-o{extract_dir}"])
+    with py7zr.SevenZipFile(filename, mode='r') as archive:
+        archive.extractall(path=extract_dir)
     print(f"Extracted {filename} to {extract_dir}.")
     os.remove(filename)  # Delete the archive file after extraction
     print(f"Deleted {filename}.")
@@ -111,11 +95,6 @@ def install_sdk():
         print("You can run command\n python radio.py --devices\n define your sound device and save ID in config.py")
 
 if __name__ == "__main__":
-    # Install Python packages from requirements.txt
-    install_requirements()
-    
-    # Install p7zip
-    install_p7zip()
     
     # Install the TeamTalk SDK
     install_sdk()

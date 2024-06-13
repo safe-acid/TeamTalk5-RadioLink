@@ -8,18 +8,18 @@ This is a simple radio player for TeamTalk5 with predefined radio stations, use 
 * Python 3.10 or later
 
 ### Installation 
-* Install/download all python requirements from requirements.txt along with TeamTalk SDK using the command
+Install/download all python requirements from requirements.txt along with TeamTalk SDK using the command
 ```shell script
 python setup.py
 ```
 ### Preparation before start
-* Define Audio Device ID by running the command
+Define Audio Device ID by running the command
 
 ```shell script
 python radio.py --devices
 ```
 
-* Save your Audio ID and server's settings in config.py
+Save your Audio ID and server's settings in config.py
 
 ### Start the bot
 * Run the radioFM by command
@@ -27,7 +27,7 @@ python radio.py --devices
 python radio.py
 ```
 
-* The default langauge is English, if you want to run on Russian use command
+The default langauge is English, if you want to run on Russian use command
 ```shell script
 python radio.py --language ru
 ```

@@ -1,18 +1,29 @@
 # TeamTalk5-ttRadio
-This is a simple radio player for TeamTalk5 with predefined radio stations, use yours stations as youo wish;
+This is a simple radio player for TeamTalk5 with predefined radio stations, use yours stations as youo wish
 
 ### Minimum requirements:
-* Windows 10/11       x64;
-* Mac OS X (10.9)     x86_64;
-* Linux (Ubuntu 22)   x86_64;
-* Python 3.11 or later;
+* Windows 10/11       x64
+* Mac OS X (10.9)     x86_64
+* Linux (Ubuntu 22)   x86_64
+* Python 3.11 or later
 
 ### Installation 
-* Install all python requirements from requirements.txt, using the "pip3 install -r requirements.txt" or just "pip install -r requirements.txt" command, without quotes;
-* Run ttsdk_downloader.py from the tools folder;
+* Install/download all python requirements from requirements.txt along with TeamTalk SDK using the command:
+python setup.py
+### Preparation before start
+* Define Audio Device ID by running the command
+python radio.py --devices
 
-Installation Linux
-sudo apt-get install p7zip-full
+* Save your Audio ID and server sertting in config.py
 
-Installatoin Mac
-brew install p7zip
+### Start the bot
+* Run the radioFM by command
+python radio.py
+
+* The default langauge is English, if you want to run on Russian use command
+python radio.py --language ru
+
+
+
+
+Good Luck - Котяра🐈‍⬛

@@ -1,8 +1,3 @@
-<style>
-    span {
-  color: blue;
-}
-</style>
 # TeamTalk5-ttRadio
 This is a simple radio player for TeamTalk5 with predefined radio stations, use yours stations as youo wish
 
@@ -10,7 +5,7 @@ This is a simple radio player for TeamTalk5 with predefined radio stations, use 
 * Windows 10/11       x64
 * Mac OS X (10.9)     x86_64
 * Linux (Ubuntu 22)   x86_64
-* Python 3.11 or later
+* Python 3.10 or later
 
 ### Installation 
 * Install/download all python requirements from requirements.txt along with TeamTalk SDK using the command

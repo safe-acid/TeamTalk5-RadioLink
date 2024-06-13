@@ -14,7 +14,7 @@ python setup.py
 ### Preparation before start
 * Define Audio Device ID by running the command
 
-<b>python radio.py --devices</b>
+<b> <color = "blue"> python radio.py --devices</b>
 
 * Save your Audio ID and server's settings in config.py
 

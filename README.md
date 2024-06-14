@@ -1,4 +1,4 @@
-# TeamTalk5-ttRadio
+# TeamTalk5-RadioLink
 This is a simple radio player for TeamTalk5 with predefined radio stations. Use your own stations as you wish. The bot will reconnect automatically if the server is rebooted.
 
 ### Minimum requirements:

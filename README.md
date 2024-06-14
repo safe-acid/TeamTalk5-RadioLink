@@ -7,7 +7,7 @@ This is a simple radio player for TeamTalk5 with predefined radio stations. Use 
 * Linux (Ubuntu 22)   x86_64
 * Python 3.11 or later
 
-## Installation 
+# Installation 
 
 ## 1 Install Requirements
 Install python requirements from requirements.txt

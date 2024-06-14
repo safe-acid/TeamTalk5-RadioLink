@@ -320,7 +320,7 @@ class TTClient:
         for device in self.tt.getSoundDevices():
             msg += f"Device ID: {device.nDeviceID},\n" \
                f"Sound System: {device.nSoundSystem},\n" \
-               f"Device Name: {device.szDeviceName.decode('utf-8')},\n\n " \
+               f"Device Name: {ttstr(device.szDeviceName)},\n\n " \
 
         print(msg)
         

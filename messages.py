@@ -10,8 +10,8 @@ messages = {
         
     },
     "about": {
-        "en": f"Radio version: {conf.version} - Котяра 🐾",
-        "ru": f"Radio version: {conf.version} - Котяра 🐾"
+        "en": f"RadioLink version: {conf.version}, {conf.sdk} - Котяра 🐾",
+        "ru": f"RadioLink version: {conf.version}, {conf.sdk} - Котяра 🐾"
     },
     
     "info": {
@@ -47,6 +47,10 @@ messages = {
     "station":{
         "en": "Station",
         "ru": "Станция"
+    },
+    "error_only_admin":{
+        "en": "Error - only administrators can operate this bot",
+        "ru": "Ошибка - управлять ботом могут только администраторы"
     }
 
 

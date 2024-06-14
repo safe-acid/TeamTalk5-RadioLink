@@ -7,13 +7,9 @@ This is a simple radio player for TeamTalk5 with predefined radio stations. Use 
 * Linux (Ubuntu 22)   x86_64
 * Python 3.11 or later
 
-### Installation 
-## 1 Install Requirements
-## 2 Set Up Audio Device ID
-## 3 Configure Settings
-## 4 Run the Bot
+## Installation 
 
-## 1. Install requrements
+## 1 Install Requirements
 Install python requirements from requirements.txt
 ```shell script
 pip install -r requirements.txt
@@ -24,16 +20,16 @@ python setup.py
 ```
 For Windows users VLC player to be downloaded 
 
-# 2. Set up Audio Device ID
+## 2 Set Up Audio Device ID
 Define Audio Device ID by running the command
 ```shell script
 python radio.py --devices
 ```
 
-# 3. Set up the server settings
+## 3 Configure Settings
 Save your Audio ID and server's settings in config.py file
 
-# 4. Run the bot
+## 4 Run the Bot
 Run the radioFM by command
 ```shell script
 python radio.py

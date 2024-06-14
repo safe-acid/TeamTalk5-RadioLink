@@ -30,7 +30,7 @@ python radio.py --devices
 Update your Audio ID and server's settings in config.py file
 
 ## 4. Run the Bot
-Run the radioFM by command
+Run the RadioLink by command
 ```shell script
 python radio.py
 ```

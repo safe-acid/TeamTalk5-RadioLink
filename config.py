@@ -4,13 +4,13 @@ class Config:
     sdk = "SDK 5.15a"
     
     #Server settings
-    host = "46.36.217.170"
+    host = ""
     tcpPort = 10555
     udpPort = 10555
-    botName = "_botRadioFM"
-    username = "open"
-    password = "open"
-    ChannelName = "/_Audio bot"
+    botName = ""
+    username = ""
+    password = ""
+    ChannelName = "/"
     ChannelPassword = ""
     
     #Other settings

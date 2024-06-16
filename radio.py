@@ -270,7 +270,10 @@ class TTClient:
                                 custom_radio_name = radio_user.custom_radio_name
                                 
                                 try:
-                                    self.vlc.stop()  # Stop any existing playback
+                                    if self.linux():
+                                        self.ff.stop()
+                                    else:    
+                                        self.vlc.stop()  # Stop any existing playback
                                     self.vlc.play_url(custom_radio_url)
                                     self.enable_voice_transmission()
                                     self.tt.doChangeStatus(0, ttstr(f"Станция - {custom_radio_name}. \"h\" справка. "))

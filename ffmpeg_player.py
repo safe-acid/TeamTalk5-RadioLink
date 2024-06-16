@@ -86,3 +86,4 @@ class FFmpegPlayer:
         self.start_process(url)
         self.monitor_thread = threading.Thread(target=self.monitor_ffmpeg)
         self.monitor_thread.start()
+        

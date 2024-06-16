@@ -4,6 +4,7 @@ from config import Config as conf
 from typing import Optional
 from messages import messages
 from vlc_player import VLCPlayer
+from ffmpeg_player import FFmpegPlayer
 
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -21,6 +22,9 @@ elif system == "Windows":
     library_dir = os.path.join(script_dir, "sdk/Library/TeamTalk_DLL")
     library_path = os.path.join(library_dir, "TeamTalk5.dll")
     print("run on Windows")
+else:
+    print(f"Unsupported system: {system}")
+    sys.exit(1)
     
 # Load the dynamic library using ctypes
 try:
@@ -54,9 +58,13 @@ class TTClient:
         self.reconnect_thread = threading.Thread(target=self.reconnect_loop, daemon=True)
         self.reconnect_thread.start()
         self.vlc = VLCPlayer()
+        self.ff = FFmpegPlayer()      
         self.admin = conf.admin  # Initialize the admin flag
         
-    
+    def linux(self):
+        if system == "Linux":
+            return True
+            
         
     def play_radio(self, radio_choice):
        
@@ -64,14 +72,18 @@ class TTClient:
         if radio_choice in radio_urls:
             url = radio_urls[radio_choice]
             try:
-                self.vlc.stop()  # Stop any existing playback
-                self.vlc.play_url(url)
-                self.enable_voice_transmission()
+               
+               self.enable_voice_transmission()
+               if self.linux():
+                    self.ff.stop()
+                    self.ff.play(url)
+               else:
+                    self.vlc.stop()  # Stop any existing playback
+                    self.vlc.play_url(url)      
                
             except Exception as e:  # Catch potential errors
                 logging.error(f"Error playing radio: {e}")
             
-
             # Change nickname status with radio
             radio_names = stations.Radio.radio_names
             if radio_choice in radio_names:
@@ -81,14 +93,11 @@ class TTClient:
             
     def radio_stop(self):
         self.disable_voice_transmission()
-        return self.vlc.stop()
+        if self.linux():
+            self.ff.stop()
+        else:
+            self.vlc.stop()
      
- 
-    def play_radio_on_request(self, msg):
-        self.radio_stop()
-        time.sleep(1)
-        self.enable_voice_transmission()
-        self.play_radio(msg)
     
     def enable_voice_transmission(self) -> None:
         self.tt.enableVoiceTransmission(True)
@@ -121,7 +130,10 @@ class TTClient:
         self.radio_stop()   
         time.sleep(1)
         self.dynamic_nick()
-        self.vlc.stop()
+        if self.linux():
+            self.ff.stop()
+        else:
+            self.vlc.stop()
         if fromUserID != None and fromUserName != None and msg != None:
             self.send_message(f"{ttstr(fromUserName)} {self.get_message('requested')} {msg}", fromUserID, 2) 
             self.send_message(self.get_message("bot_sleeping"),fromUserID,1)  
@@ -147,7 +159,7 @@ class TTClient:
         self.tt.doJoinChannelByID(channelID, ttstr(conf.ChannelPassword))
         self.tt.doChangeStatus(0, ttstr(self.get_message("info")))     
         self.set_input_device(conf.audioInputID)
-      
+
     def reconnect_loop(self):
         while True:   
                 if not self.connected:
@@ -240,8 +252,6 @@ class TTClient:
         #user must be in chanel and not anonymous
         if anonymous and userInChanel:
             if self.isUserAdmin(fromUserID) or not self.admin:
-                print(f"admin? {self.isUserAdmin(fromUserID)}")
-                print("allowed.")
             
                 if  msg.lower() == "v":
                     self.send_message(self.get_message("about"),fromUserID,1) 
@@ -269,10 +279,8 @@ class TTClient:
                                     logging.error(f"Error playing radio: {e}")
                             
                             elif 1 <= station_number <= len(stations.Radio.radio_urls):  # Check if valid number
-                                self.enable_voice_transmission()
                                 self.play_radio(str(station_number))  # Convert back to string
-                        
-                                
+                                           
                         except ValueError:
                         # Handle cases where the message isn't a number
                             pass       
@@ -280,7 +288,7 @@ class TTClient:
                 if msg.lower()[:3] == "add":
                 
                     # Extracting name and URL from the message using regex
-                    match = re.match(r'add\s+(\w+)\s+(https?://\S+\.m3u8)', msg, re.IGNORECASE)
+                    match = re.match(r'add\s+(\w+)\s+(https?://\S+)', msg, re.IGNORECASE)
 
                     if match:
                         name = match.group(1)  # Extracting the name
@@ -306,26 +314,25 @@ class TTClient:
                     try:
                         volume_level = int(msg[1:])  # Extract digits after "v"
                         if 0 <= volume_level <= conf.max_volume:
-                            self.vlc.set_volume(volume_level)
+                            if self.linux():
+                                self.ff.set_volume(volume_level)
+                            else:
+                                self.vlc.set_volume(volume_level)
                             self.send_message(f"{self.get_message('vol_set_to')}  {volume_level}", fromUserID, 2)
                         else:
                             self.send_message(self.get_message("wrong_volume"), fromUserID, 1)
                     except ValueError:
-                        self.send_message((self.get_message("wrong_volume_format")), fromUserID, 1)
-                    
-                    
+                        self.send_message((self.get_message("wrong_volume_format")), fromUserID, 1)                 
             
                 elif msg.lower() == "q":
                     self.radio_stop()
                     self.quit(fromUserID,fromUserName, msg)
-                    
-            
+       
             else:
                 #Error - only administrators can operate this bot
                 self.send_message(self.get_message("error_only_admin"), fromUserID, 1)
                
-        
-    
+         
     def defaultAudioDevices(self):
         msg = "\n\nDefault Audio Input Devices:\n"
         for device in self.tt.getSoundDevices():
@@ -335,6 +342,7 @@ class TTClient:
 
         print(msg)
         
+          
 if __name__ == "__main__":
     try:
         parser = argparse.ArgumentParser(description='Process some integers.')

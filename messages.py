@@ -59,7 +59,10 @@ messages = {
     "error_only_admin":{
         "en": "Error - only administrators can operate this bot",
         "ru": "Ошибка - управлять ботом могут только администраторы"
+    },
+    "add_url":{
+        "ru": "f'Station:{name} has been added'",
+        "ru": "f'Радиостанция:{name} добавлена'"
     }
-
 
 }

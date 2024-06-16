@@ -20,8 +20,8 @@ class Radio:
     techno      =   "https://hls-01-radiorecord.hostingradio.ru/record-technopop/playlist.m3u8"
     simphony    =   "https://hls-01-radiorecord.hostingradio.ru/record-symph/playlist.m3u8"
     naftalin    =   "https://hls-01-radiorecord.hostingradio.ru/record-naft/playlist.m3u8"
-    hardstyle   =   "https://hls-01-radiorecord.hostingradio.ru/record-teo/playlist.m3u8"
-    medljak     =   "http://radio.loveprod.ru:8000/live"
+    medljak     =   "https://hls-01-radiorecord.hostingradio.ru/record-mdl/playlist.m3u8"
+    danik       =   "http://radio.loveprod.ru:8000/live"
     
     
     radio_urls = {
@@ -43,10 +43,11 @@ class Radio:
             "16": techno,
             "17": simphony,
             "18": naftalin,
-            "19": hardstyle,
-            "20": medljak,
+            "19": medljak,
+            "20": danik,
             }
  
+#names for help message
     radio_names = {
             "1": "Rock",
             "2": "Супердискотека 90х",
@@ -66,8 +67,8 @@ class Radio:
             "16": "Technoshop",
             "17": "Симфония FM",
             "18": "Нафталин FM",
-            "19": "Hardstyle",
-            "20": "Медляк FM",
+            "19": "Мед­ляк FM",
+            "20": "Daniil",
             }
 
 #refresh variable after user update

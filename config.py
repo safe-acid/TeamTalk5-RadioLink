@@ -1,6 +1,6 @@
 class Config:
     #Version
-    version = "1.0"
+    version = "1.1"
     sdk = "SDK 5.15a"
     
     #Server settings
@@ -15,7 +15,7 @@ class Config:
     
     #Other settings
     #Audio Device ID - INT 
-    audioInputID = 3  
+    audioInputID = 1  
     #Max default volume - INT     
     max_volume = 50 
     #Only admin can operaate this bot - Boolean        

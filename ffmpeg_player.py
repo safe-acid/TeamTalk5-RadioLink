@@ -50,11 +50,23 @@ class FFmpegPlayer:
 
     def stop(self):
         if self.process:
-            os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)
-            print("Playback stopped.")
+            try:
+                os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)
+                self.process.wait()
+            except Exception as e:
+                print(f"Error stopping ffmpeg process: {e}")
+            finally:
+                self.process = None
         if self.player_process:
-            os.killpg(os.getpgid(self.player_process.pid), signal.SIGTERM)
+            try:
+                os.killpg(os.getpgid(self.player_process.pid), signal.SIGTERM)
+                self.player_process.wait()
+            except Exception as e:
+                print(f"Error stopping ffplay process: {e}")
+            finally:
+                self.player_process = None
         self.stop_event.set()
+        print("Playback stopped.")
 
     def set_volume(self, volume):
         # Ensure volume is within the range of 0 to max_volume

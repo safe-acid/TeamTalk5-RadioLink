@@ -19,7 +19,8 @@ class FFmpegPlayer:
         self.stop_event.clear()
         self.process = subprocess.Popen(
             [
-                'ffmpeg', '-i', url, '-filter_complex',
+                'ffmpeg', '-fflags', 'nobuffer', '-rtbufsize', '150M',
+                '-i', url, '-filter_complex',
                 f'[0:a]volume={self.current_volume}[a]', '-map', '[a]', '-f', 'wav', 'pipe:1'
             ],
             stdout=subprocess.PIPE,
@@ -86,4 +87,3 @@ class FFmpegPlayer:
         self.start_process(url)
         self.monitor_thread = threading.Thread(target=self.monitor_ffmpeg)
         self.monitor_thread.start()
-        

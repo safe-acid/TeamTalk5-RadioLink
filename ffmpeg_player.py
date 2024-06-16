@@ -12,8 +12,10 @@ class FFmpegPlayer:
         self.current_volume = 1.0  # Default volume (1.0 is 100%)
         self.stop_event = threading.Event()
         self.max_volume = conf.max_volume
+        self.current_url = None  # Store the current URL
 
     def start_process(self, url):
+        self.current_url = url  # Update the current URL
         self.stop_event.clear()
         self.process = subprocess.Popen(
             [
@@ -69,15 +71,18 @@ class FFmpegPlayer:
         print("Playback stopped.")
 
     def set_volume(self, volume):
-        # Ensure volume is within the range of 0 to max_volume
-        volume = max(0.0, min(float(volume), self.max_volume))
-        self.current_volume = volume
-        print(f"Volume set to: {volume * 100}%")
-        self.restart_process()
+        # Ensure volume is within the range of 0 to 100
+        volume = max(0, min(int(volume), 100))
+        self.current_volume = volume / 100.0  # Convert to 0.0 - 1.0 range for FFmpeg
+        print(f"Volume set to: {volume}%")
+        if self.current_url:
+            self.restart_process(self.current_url)
+        else:
+            print("No URL currently set. Cannot restart process.")
 
-    def restart_process(self):
+    def restart_process(self, url):
         self.stop()
         time.sleep(1)  # Give it a moment to properly stop
-        self.start_process()
+        self.start_process(url)
         self.monitor_thread = threading.Thread(target=self.monitor_ffmpeg)
         self.monitor_thread.start()

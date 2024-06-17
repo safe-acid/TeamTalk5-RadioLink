@@ -3,52 +3,52 @@
 ```shell script
 sudo apt update
 ```
-### check in python is installed
+### Check in python is installed
 ```shell script
 python3 —version 
 ```
-### install python if need it
+### Install python if need it
 ```shell script
 sudo apt install python3
 ```
-### check if pip installed
+### Check if pip installed
 ```shell script
 pip — version
 ```
-### instal pip if need it
+### Instal pip if need it
 ```shell script
 python3 -m pip install --upgrade pip 
 ```
-### install git
+### Install git
 ```shell script
 sudo apt install git
 ```
-### install pulse audio, vlc, ffmpeg
+### Install pulse audio, vlc, ffmpeg
 ```shell script
 sudo apt install pulseaudio
 sudo apt install vlc
 sudo apt install ffmpeg
 ```
-### verify 
+### Verify 
 ```shell script
 pulseaudio --version
 vlc --version
 ffmpeg --version
 ```
-### start pulseaudio
+### Start pulseaudio
 ```shell script
 pulseaudio —start
 ```
-### add Virtual audio devices
+### Add Virtual audio devices
 ```shell script
 pactl load-module module-null-sink sink_name=Source
 pactl load-module module-virtual-source source_name=VirtualMic master=Source.monitor
 ```
-### after steps above you shoud get number IDss after creating null-sinks, it means all goes well,create config file
+### After steps above you shoud get number IDss after creating null-sinks, it means all goes well,create config file
 ```shell script
 nano ~/.config/pulse/default.pa 
 ```
-### add configuratioon into default.pa and save the file 
+### Add configuratioon into default.pa and save the file 
 ```shell script
 # include the default.pa pulseaudio config file
 .include /etc/pulse/default.pa
@@ -89,8 +89,9 @@ python3 radio.py --devices
 ```shell script
 nano config.py
 ```
-### run the bot
+### Run the bot
 ```shell script
 python3 radio.py
 ```
 
+Good Luck: Котяра 🐾

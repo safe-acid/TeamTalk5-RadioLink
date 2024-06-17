@@ -83,9 +83,12 @@ python3 -m venv .env
 source .env/bin/activate
 pip install -r requirements.txt
 python3 setup.py
+```
+### Check Audio ID of Device Name: Virtual Source VirtualMic on Monitor
+```shell script
 python3 radio.py --devices
 ```
-### Setup you server settings and use Audio ID from Device Name: Virtual Source VirtualMic on Monitor of Null Output
+### Setup you server settings and number of Audio ID 
 ```shell script
 nano config.py
 ```

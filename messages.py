@@ -61,7 +61,7 @@ messages = {
         "ru": "Ошибка - управлять ботом могут только администраторы"
     },
     "add_url":{
-        "ru": "f'Station:{name} has been added'",
+        "en": "f'Station:{name} has been added'",
         "ru": "f'Радиостанция:{name} добавлена'"
     }
 

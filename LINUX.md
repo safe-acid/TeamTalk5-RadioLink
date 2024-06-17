@@ -1,4 +1,4 @@
-# Installation from zero on Linux Ubuntu 22+/Debian 12+
+# Installation from zero on Linux Ubuntu 22+, Debian 12+
 
 ```shell script
 sudo apt update

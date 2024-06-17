@@ -1,5 +1,5 @@
 import subprocess
-import time
+#import time
 import signal
 import os
 import threading
@@ -9,8 +9,8 @@ class FFmpegPlayer:
     def __init__(self):
         self.process = None
         self.player_process = None
-        self.current_volume = 1.0  # Default volume (1.0 is 100%)
         self.stop_event = threading.Event()
+        # Default volume (1.0 is 100%)
         self.max_volume = conf.max_volume
         self.current_url = None  # Store the current URL
         self.monitor_thread = None
@@ -22,7 +22,7 @@ class FFmpegPlayer:
             [
                 'ffmpeg', '-loglevel', 'error', '-fflags', 'nobuffer', '-rtbufsize', '250M',
                 '-i', url, '-b:a', '128k', '-filter_complex',
-                f'[0:a]volume={self.current_volume}[a]', '-map', '[a]', '-f', 'wav', 'pipe:1'
+                f'[0:a]volume={self.max_volume / 100 }[a]', '-map', '[a]', '-f', 'wav', 'pipe:1'
             ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,

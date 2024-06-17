@@ -76,8 +76,8 @@ systemctl --user start pulseaudio
 
 
 ## Install Radio Link
-git clone https://github.com/safe-acid/TeamTalk5-RadioLink.git
 ```shell script
+git clone https://github.com/safe-acid/TeamTalk5-RadioLink.git
 cd TeamTalk5-RadioLink
 python3 -m venv .env
 source .env/bin/activate

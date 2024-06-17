@@ -20,12 +20,12 @@ class FFmpegPlayer:
         self.stop_event.clear()
         self.process = subprocess.Popen(
             [
-                'ffmpeg', '-fflags', 'nobuffer', '-rtbufsize', '150M',
+                'ffmpeg', '-fflags', 'nobuffer', '-rtbufsize', '250M',
                 '-i', url, '-filter_complex',
                 f'[0:a]volume={self.current_volume}[a]', '-map', '[a]', '-f', 'wav', 'pipe:1'
             ],
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,  # Redirect stderr to /dev/null
             stdin=subprocess.PIPE,
             text=True,
             preexec_fn=os.setsid
@@ -33,7 +33,7 @@ class FFmpegPlayer:
         self.player_process = subprocess.Popen(
             ['ffplay', '-nodisp', '-autoexit', '-'],
             stdin=self.process.stdout,
-            stderr=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,  # Redirect stderr to /dev/null
             text=True,
             preexec_fn=os.setsid
         )
@@ -46,12 +46,6 @@ class FFmpegPlayer:
                 print("Playback finished or encountered an error.")
                 self.stop()
                 break
-
-            # Check if the process is still outputting data
-            output = self.process.stderr.readline()
-            if output:
-                last_output_time = time.time()
-                print(output.strip())
 
             # Restart if frozen for more than 60 seconds
             if time.time() - last_output_time > 60:

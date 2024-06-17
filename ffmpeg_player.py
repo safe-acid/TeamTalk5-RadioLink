@@ -14,18 +14,19 @@ class FFmpegPlayer:
         self.max_volume = conf.max_volume
         self.current_url = None  # Store the current URL
         self.monitor_thread = None
+        self.monitor_thread_lock = threading.Lock()
 
     def start_process(self, url):
         self.current_url = url  # Update the current URL
         self.stop_event.clear()
         self.process = subprocess.Popen(
             [
-                'ffmpeg', '-fflags', 'nobuffer', '-rtbufsize', '250M',
+                'ffmpeg', '-fflags', 'nobuffer', '-rtbufsize', '150M',
                 '-i', url, '-filter_complex',
                 f'[0:a]volume={self.current_volume}[a]', '-map', '[a]', '-f', 'wav', 'pipe:1'
             ],
             stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,  # Redirect stderr to /dev/null
+            stderr=subprocess.PIPE,
             stdin=subprocess.PIPE,
             text=True,
             preexec_fn=os.setsid
@@ -33,7 +34,7 @@ class FFmpegPlayer:
         self.player_process = subprocess.Popen(
             ['ffplay', '-nodisp', '-autoexit', '-'],
             stdin=self.process.stdout,
-            stderr=subprocess.DEVNULL,  # Redirect stderr to /dev/null
+            stderr=subprocess.PIPE,
             text=True,
             preexec_fn=os.setsid
         )
@@ -47,18 +48,27 @@ class FFmpegPlayer:
                 self.stop()
                 break
 
+            # Check if the process is still outputting data
+            output = self.process.stderr.readline()
+            if output:
+                last_output_time = time.time()
+                print(output.strip())
+
             # Restart if frozen for more than 60 seconds
             if time.time() - last_output_time > 60:
                 print("FFmpeg process frozen, restarting...")
                 self.restart_process(self.current_url)
-                last_output_time = time.time()
+                break
             
             time.sleep(1)
 
     def play(self, url):
         self.start_process(url)
-        self.monitor_thread = threading.Thread(target=self.monitor_ffmpeg)
-        self.monitor_thread.start()
+        with self.monitor_thread_lock:
+            if self.monitor_thread is not None and self.monitor_thread.is_alive():
+                self.monitor_thread.join()  # Wait for the previous monitor thread to exit
+            self.monitor_thread = threading.Thread(target=self.monitor_ffmpeg)
+            self.monitor_thread.start()
 
     def stop(self):
         if self.process:
@@ -94,7 +104,8 @@ class FFmpegPlayer:
         self.stop()
         time.sleep(1)  # Give it a moment to properly stop
         self.start_process(url)
-        if self.monitor_thread:
-            self.monitor_thread.join()  # Wait for the previous monitor thread to exit
-        self.monitor_thread = threading.Thread(target=self.monitor_ffmpeg)
-        self.monitor_thread.start()
+        with self.monitor_thread_lock:
+            if self.monitor_thread is not None and self.monitor_thread.is_alive():
+                self.monitor_thread.join()  # Wait for the previous monitor thread to exit
+            self.monitor_thread = threading.Thread(target=self.monitor_ffmpeg)
+            self.monitor_thread.start()

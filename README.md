@@ -19,7 +19,16 @@ Download essentiial TeamTalk5 SDK using the command
 python setup.py
 ```
 Windows users must install a <a href = "https://www.videolan.org/vlc/download-windows.html">VLC player</a>
-
+Linux 
+```shell script
+sudo apt install vlc
+sudo apt install ffmpeg
+```
+Mac
+```shell script
+brew install vlc
+brew install ffmpeg
+```
 ## 2. Set Up Audio Device ID
 Define Audio Device ID by running the command
 ```shell script

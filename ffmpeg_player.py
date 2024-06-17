@@ -20,9 +20,9 @@ class FFmpegPlayer:
         self.current_url = url  # Update the current URL
         self.stop_event.clear()
         self.process = subprocess.Popen(
-            [
+          [
                 'ffmpeg', '-loglevel', 'error', '-fflags', 'nobuffer', '-rtbufsize', '250M',
-                '-i', url, '-filter_complex',
+                '-i', url, '-b:a', '128k', '-filter_complex',
                 f'[0:a]volume={self.current_volume}[a]', '-map', '[a]', '-f', 'wav', 'pipe:1'
             ],
             stdout=subprocess.PIPE,

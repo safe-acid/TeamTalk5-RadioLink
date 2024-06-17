@@ -1,4 +1,4 @@
-import subprocess
+ import subprocess
 import time
 import signal
 import os
@@ -14,13 +14,12 @@ class FFmpegPlayer:
         self.max_volume = conf.max_volume
         self.current_url = None  # Store the current URL
         self.monitor_thread = None
-        self.monitor_thread_lock = threading.Lock()
 
     def start_process(self, url):
         self.current_url = url  # Update the current URL
         self.stop_event.clear()
         self.process = subprocess.Popen(
-          [
+            [
                 'ffmpeg', '-loglevel', 'error', '-fflags', 'nobuffer', '-rtbufsize', '250M',
                 '-i', url, '-b:a', '128k', '-filter_complex',
                 f'[0:a]volume={self.current_volume}[a]', '-map', '[a]', '-f', 'wav', 'pipe:1'
@@ -58,17 +57,14 @@ class FFmpegPlayer:
             if time.time() - last_output_time > 60:
                 print("FFmpeg process frozen, restarting...")
                 self.restart_process(self.current_url)
-                break
+                last_output_time = time.time()
             
             time.sleep(1)
 
     def play(self, url):
         self.start_process(url)
-        with self.monitor_thread_lock:
-            if self.monitor_thread is not None and self.monitor_thread.is_alive():
-                self.monitor_thread.join()  # Wait for the previous monitor thread to exit
-            self.monitor_thread = threading.Thread(target=self.monitor_ffmpeg)
-            self.monitor_thread.start()
+        self.monitor_thread = threading.Thread(target=self.monitor_ffmpeg)
+        self.monitor_thread.start()
 
     def stop(self):
         if self.process:
@@ -104,8 +100,7 @@ class FFmpegPlayer:
         self.stop()
         time.sleep(1)  # Give it a moment to properly stop
         self.start_process(url)
-        with self.monitor_thread_lock:
-            if self.monitor_thread is not None and self.monitor_thread.is_alive():
-                self.monitor_thread.join()  # Wait for the previous monitor thread to exit
-            self.monitor_thread = threading.Thread(target=self.monitor_ffmpeg)
-            self.monitor_thread.start()
+        if self.monitor_thread:
+            self.monitor_thread.join()  # Wait for the previous monitor thread to exit
+        self.monitor_thread = threading.Thread(target=self.monitor_ffmpeg)
+        self.monitor_thread.start()

@@ -72,8 +72,8 @@ class TTClient:
         if radio_choice in radio_urls:
             url = radio_urls[radio_choice]
             try:
-               
                self.enable_voice_transmission()
+               time.sleep(0.5)
                if self.linux():
                     self.ff.stop()
                     self.ff.play(url)

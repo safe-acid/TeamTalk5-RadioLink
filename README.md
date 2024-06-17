@@ -19,6 +19,7 @@ Download essentiial TeamTalk5 SDK using the command
 python setup.py
 ```
 Windows users must install a <a href = "https://www.videolan.org/vlc/download-windows.html">VLC player</a>
+
 Linux 
 ```shell script
 sudo apt install vlc

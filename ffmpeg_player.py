@@ -21,7 +21,7 @@ class FFmpegPlayer:
         self.stop_event.clear()
         self.process = subprocess.Popen(
             [
-                'ffmpeg', '-fflags', 'nobuffer', '-rtbufsize', '150M',
+                'ffmpeg', '-loglevel', 'error', '-fflags', 'nobuffer', '-rtbufsize', '250M',
                 '-i', url, '-filter_complex',
                 f'[0:a]volume={self.current_volume}[a]', '-map', '[a]', '-f', 'wav', 'pipe:1'
             ],

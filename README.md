@@ -18,14 +18,16 @@ Download essentiial TeamTalk5 SDK using the command
 ```shell script
 python setup.py
 ```
-Windows users must install a <a href = "https://www.videolan.org/vlc/download-windows.html">VLC player</a>
+Windows:
 
-Linux 
+Users must install a <a href = "https://www.videolan.org/vlc/download-windows.html">VLC player</a>
+
+Linux:
 ```shell script
 sudo apt install vlc
 sudo apt install ffmpeg
 ```
-Mac
+Mac:
 ```shell script
 brew install vlc
 brew install ffmpeg

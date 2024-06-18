@@ -261,8 +261,11 @@ class TTClient:
                     self.send_message(self.get_message("help"),fromUserID,1) 
                 else:
                         try:
-                            station_number = int(msg.lower())  
-                            if station_number == 21:
+                            station_number = int(msg.lower())     
+                            radio_urls = stations.Radio.radio_urls
+                            custom_station_number = str(len(radio_urls) + 1)
+                            
+                            if str(station_number) == custom_station_number:   
                             
                                 importlib.reload(radio_user)
                                 # Access the latest value
@@ -296,21 +299,48 @@ class TTClient:
                     if match:
                         name = match.group(1)  # Extracting the name
                         url = match.group(2)   # Extracting the URL
-                        response = requests.head(url)
-                        
-                        if response.status_code in [200, 301]:
-                            print("URL is valid and returns 200 or 301 status code.")
-                            
-                            # Open the 'radio_user.py' file for appending
-                            with open('radio_user.py', 'w') as file:
-                                file.write(f'custom_radio_url = "{url}"\n')   
-                                name = name[:10]
-                                file.write(f'custom_radio_name = "{name}"\n')
-                                self.send_message(f"Радиостанция:{name} добавлена", fromUserID, 1)
-                                print("New radio URL and name added to the radio.py file.")
-                    else:
-                                self.send_message(f"URL does not return 200 or 301 status code.", fromUserID, 1)
+
+                        try:
+                            response = requests.head(url)
+                            if response.status_code in [200, 301]:
+                                print("URL is valid and returns 200 or 301 status code.")
+
+                                try:
+                                    # Ensure the correct path to radio_user.py
+                                    radio_user_path = os.path.join(os.path.dirname(__file__), 'radio_user.py')
+                                    print(f"Writing to {radio_user_path}")
+
+                                    # Open the 'radio_user.py' file for writing
+                                    with open(radio_user_path, 'w') as file:
+                                        file.write(f'custom_radio_url = "{url}"\n')
+                                        name = name[:10]
+                                        file.write(f'custom_radio_name = "{name}"\n')
+
+                                    self.send_message(self.get_message("add_url"), fromUserID, 1)
+                                    print("New radio URL and name added to the radio_user.py file.")
+                                    
+                                    # Reload stations to include the new custom radio
+                                    importlib.reload(stations)
+                                    
+                                    # Debug: Print new values
+                                    import radio_user
+                                    print(f"Updated custom_radio_url: {radio_user.custom_radio_url}")
+                                    print(f"Updated custom_radio_name: {radio_user.custom_radio_name}")
+
+                                except Exception as e:
+                                    self.send_message(f"Error writing to file: {e}", fromUserID, 1)
+                                    print(f"Error writing to file: {e}")
+                            else:
+                                self.send_message("URL does not return 200 or 301 status code.", fromUserID, 1)
                                 print("URL does not return 200 or 301 status code.")
+
+                        except requests.exceptions.RequestException as e:
+                            self.send_message(self.get_message("wrong_url"), fromUserID, 1)
+                            print(f"Error checking URL: {e}")
+                            
+                    else:
+                        self.send_message(self.get_message("wrong_url_command"), fromUserID, 1)
+                        print("Invalid command format. Use: add <name> <url>")
 
                 # Check for volume command first
                 elif msg.lower().startswith("v") and len(msg) > 1:  # Check for at least one digit after "v"

@@ -5,7 +5,7 @@ sudo apt update
 ```
 ### Check in python is installed
 ```shell script
-python3 —version 
+python3 --version 
 ```
 ### Install python if need it
 ```shell script
@@ -13,7 +13,7 @@ sudo apt install python3
 ```
 ### Check if pip installed
 ```shell script
-pip — version
+pip --version
 ```
 ### Instal pip if need it
 ```shell script

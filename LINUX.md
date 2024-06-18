@@ -37,7 +37,7 @@ ffmpeg --version
 ```
 ### Start pulseaudio
 ```shell script
-pulseaudio —start
+pulseaudio --start
 ```
 ### Add Virtual audio devices
 ```shell script

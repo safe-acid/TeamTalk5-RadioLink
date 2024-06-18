@@ -75,7 +75,7 @@ systemctl --user start pulseaudio
 ### Clone the repository
 ```shell script
 git clone https://github.com/safe-acid/TeamTalk5-RadioLink.git
-
+```
 ### Change to the repository directory
 ```shell script
 cd TeamTalk5-RadioLink

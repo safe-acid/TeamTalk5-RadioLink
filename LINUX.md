@@ -25,9 +25,7 @@ sudo apt install git
 ```
 ### Install pulse audio, vlc, ffmpeg
 ```shell script
-sudo apt install pulseaudio
-sudo apt install vlc
-sudo apt install ffmpeg
+sudo apt install -y pulseaudio vlc ffmpeg
 ```
 ### Verify 
 ```shell script

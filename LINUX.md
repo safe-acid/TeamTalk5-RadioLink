@@ -72,16 +72,24 @@ systemctl --user enable pulseaudio
 systemctl --user start pulseaudio
 ```
 
-
-## Install Radio Link
-```shell script
+### Clone the repository
 git clone https://github.com/safe-acid/TeamTalk5-RadioLink.git
+
+### Change to the repository directory
 cd TeamTalk5-RadioLink
+
+### Set up a virtual environment
 python3 -m venv .env
+
+### Activate the virtual environment
 source .env/bin/activate
+
+### Install the required dependencies
 pip install -r requirements.txt
+
+### Run the setup script
 python3 setup.py
-```
+
 ### Check Audio ID of Device Name: Virtual Source VirtualMic on Monitor
 ```shell script
 python3 radio.py --devices

@@ -17,7 +17,7 @@ pip --version
 ```
 ### Instal pip if need it
 ```shell script
-python3 -m pip install --upgrade pip 
+sudo apt install python3-pip
 ```
 ### Install git
 ```shell script

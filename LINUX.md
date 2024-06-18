@@ -42,7 +42,7 @@ pulseaudio --start
 pactl load-module module-null-sink sink_name=Source
 pactl load-module module-virtual-source source_name=VirtualMic master=Source.monitor
 ```
-### After steps above you shoud get number IDss after creating null-sinks, it means all goes well,create config file
+#### After steps above you shoud get number IDs after creating null-sinks, it means all goes well,create config file
 ```shell script
 nano ~/.config/pulse/default.pa 
 ```

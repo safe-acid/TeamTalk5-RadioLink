@@ -61,8 +61,16 @@ messages = {
         "ru": "Ошибка - управлять ботом могут только администраторы"
     },
     "add_url":{
-        "en": "f'Station:{name} has been added'",
-        "ru": "f'Радиостанция:{name} добавлена'"
+        "en": "Station has been added'",
+        "ru": "Радиостанция добавлена'"
+    },
+     "wrong_url":{
+        "en": "Wrong URL",
+        "ru": "Неправильная ссылка"
+    },
+     "wrong_url_command":{
+        "en": "Invalid command format. Use: add <name> <url>",
+        "ru": "Неправильная команда, используйте: add ИмяСтацнии https://ссылка_на_поток"
     }
 
 }

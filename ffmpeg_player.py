@@ -10,6 +10,7 @@ class FFmpegPlayer:
         self.player_process = None
         self.stop_event = threading.Event()
         self.max_volume = conf.max_volume
+        self.current_volume = self.max_volume / 100
         self.current_url = None
 
     def start_process(self, url):
@@ -19,7 +20,7 @@ class FFmpegPlayer:
             [
                 'ffmpeg', '-loglevel', 'error', '-fflags', 'nobuffer', '-rtbufsize', '250M',
                 '-i', url, '-b:a', '128k', '-filter_complex',
-                f'[0:a]volume={self.max_volume / 100}[a]', '-map', '[a]', '-f', 'wav', 'pipe:1'
+                f'[0:a]volume={self.current_volume}[a]', '-map', '[a]', '-f', 'wav', 'pipe:1'
             ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,

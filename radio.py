@@ -124,9 +124,7 @@ class TTClient:
         
     def set_input_device(self, id: int) -> None:
         self.tt.initSoundInputDevice(id)   
-        
-    def set_output_device(self, id: int) -> None:
-        self.tt.initSoundOutputDevice(id) 
+    
            
     def quit(self,fromUserID=None,fromUserName=None, msg=None):
         time.sleep(1)
@@ -162,7 +160,6 @@ class TTClient:
         self.tt.doJoinChannelByID(channelID, ttstr(conf.ChannelPassword))
         self.tt.doChangeStatus(0, ttstr(self.get_message("info")))     
         self.set_input_device(conf.audioInputID)
-        self.set_output_device(conf.audioOutputID)
 
     def reconnect_loop(self):
         while True:   

@@ -16,8 +16,6 @@ class Config:
     #Other settings
     #Audio Device ID - INT 
     audioInputID = 0 
-    #Audio Device ID - INT 
-    audioOutputID = 0 
     #Max default volume - INT     
     max_volume = 50 
     #Only admin can operaate this bot - Boolean        

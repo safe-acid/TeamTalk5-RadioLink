@@ -7,8 +7,8 @@ messages = {
     },
     
     "help": {
-        "en": "x: number of station for playing\np: pause\nadd: add own station URL\nexmple: add RadioFM https://radio.playlist.m3u8\nv25: set volume\nv: about\nq: exit",
-        "ru": "x: номер станции для начала трансляции\np: пауза\nadd: Добавить свою радиостанцию\nПример: add RadioFM https://radio.playlist.m3u8\nv25: громкость\nv: версия\nq: выход"  
+        "en": "X: number of station for playing\nadd: add own station URL\nexmple: add RadioFM https://radio.playlist.m3u8\nv25: set volume\nv: about\nq: exit",
+        "ru": "X: укажите число, для выбора номера станции\nadd: Добавить свою радиостанцию\nПример: add RadioFM https://radio.playlist.m3u8\nv25: громкость\nv: версия\nq: выход"  
     },
     
     "about": {

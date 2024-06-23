@@ -71,6 +71,11 @@ messages = {
      "wrong_url_command":{
         "en": "Invalid command format. Use: add <name> <url>",
         "ru": "Неправильная команда, используйте: add ИмяСтацнии https://ссылка_на_поток"
+    },
+      
+     "flood_msg":{
+        "en": "Too fast try a bit later",
+        "ru": "Слишком быстро. Подождите немного"
     }
 
 }

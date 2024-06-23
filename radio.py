@@ -5,6 +5,7 @@ from typing import Optional
 from messages import messages
 from vlc_player import VLCPlayer
 from ffmpeg_player import FFmpegPlayer
+from collections import defaultdict
 
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -60,6 +61,7 @@ class TTClient:
         self.vlc = VLCPlayer()
         self.ff = FFmpegPlayer()      
         self.admin = conf.admin  # Initialize the admin flag
+        self.last_message_time = defaultdict(lambda: 0)  # Track last message time for each user
         
     def linux(self):
         if system == "Linux":
@@ -248,124 +250,129 @@ class TTClient:
         anonymous = self.anonymous(fromUserName)
         userInChanel = self.userID_inChannel(fromUserID)
         msg = ttstr(msg)
-        time.sleep(1.5)
-
-        #user must be in chanel and not anonymous
-        if anonymous and userInChanel:
-            if self.isUserAdmin(fromUserID) or not self.admin:
-            
-                if  msg.lower() == "v":
-                    self.send_message(self.get_message("about"),fromUserID,1) 
-                # RADIO Selections
-                if msg.lower() == "h":
-                    self.send_radio_menu(fromUserID)
-                    self.send_message(self.get_message("help"),fromUserID,1) 
-                else:
-                        try:
-                            station_number = int(msg.lower())     
-                            radio_urls = stations.Radio.radio_urls
-                            custom_station_number = str(len(radio_urls) + 1)
-                            
-                            if str(station_number) == custom_station_number:   
-                            
-                                importlib.reload(radio_user)
-                                # Access the latest value
-                                custom_radio_url = radio_user.custom_radio_url
-                                custom_radio_name = radio_user.custom_radio_name
-                                
-                                try:
-                                    if self.linux():
-                                        self.ff.stop()
-                                    else:    
-                                        self.vlc.stop()  # Stop any existing playback
-                                    self.vlc.play_url(custom_radio_url)
-                                    self.enable_voice_transmission()
-                                    self.tt.doChangeStatus(0, ttstr(f"Станция - {custom_radio_name}. \"h\" справка. "))
-                                
-                                except Exception as e:  # Catch potential errors
-                                    logging.error(f"Error playing radio: {e}")
-                            
-                            elif 1 <= station_number <= len(stations.Radio.radio_urls):  # Check if valid number
-                                self.play_radio(str(station_number))  # Convert back to string
-                                           
-                        except ValueError:
-                        # Handle cases where the message isn't a number
-                            pass       
-                                
-                if msg.lower()[:3] == "add":
+        current_time = (time.time())    
+        # Check for flooding
+        if current_time - self.last_message_time[fromUserID] < conf.msgTimeDelay:
+            self.send_message(self.get_message("flood_msg"), fromUserID, 1)
+        else:
+            # Update last message time
+            self.last_message_time[fromUserID] = current_time
+            #user must be in chanel and not anonymous
+            if anonymous and userInChanel:
+                if self.isUserAdmin(fromUserID) or not self.admin:
                 
-                    # Extracting name and URL from the message using regex
-                    match = re.match(r'add\s+(\w+)\s+(https?://\S+)', msg, re.IGNORECASE)
-
-                    if match:
-                        name = match.group(1)  # Extracting the name
-                        url = match.group(2)   # Extracting the URL
-
-                        try:
-                            response = requests.head(url)
-                            if response.status_code in [200, 301]:
-                                print("URL is valid and returns 200 or 301 status code.")
-
-                                try:
-                                    # Ensure the correct path to radio_user.py
-                                    radio_user_path = os.path.join(os.path.dirname(__file__), 'radio_user.py')
-                                    print(f"Writing to {radio_user_path}")
-
-                                    # Open the 'radio_user.py' file for writing
-                                    with open(radio_user_path, 'w') as file:
-                                        file.write(f'custom_radio_url = "{url}"\n')
-                                        name = name[:10]
-                                        file.write(f'custom_radio_name = "{name}"\n')
-
-                                    self.send_message(self.get_message("add_url"), fromUserID, 1)
-                                    print("New radio URL and name added to the radio_user.py file.")
-                                    
-                                    # Reload stations to include the new custom radio
-                                    importlib.reload(stations)
-                                    
-                                    # Debug: Print new values
-                                    import radio_user
-                                    print(f"Updated custom_radio_url: {radio_user.custom_radio_url}")
-                                    print(f"Updated custom_radio_name: {radio_user.custom_radio_name}")
-
-                                except Exception as e:
-                                    self.send_message(f"Error writing to file: {e}", fromUserID, 1)
-                                    print(f"Error writing to file: {e}")
-                            else:
-                                self.send_message("URL does not return 200 or 301 status code.", fromUserID, 1)
-                                print("URL does not return 200 or 301 status code.")
-
-                        except requests.exceptions.RequestException as e:
-                            self.send_message(self.get_message("wrong_url"), fromUserID, 1)
-                            print(f"Error checking URL: {e}")
-                            
+                    if  msg.lower() == "v":
+                        self.send_message(self.get_message("about"),fromUserID,1) 
+                    # RADIO Selections
+                    if msg.lower() == "h":
+                        self.send_radio_menu(fromUserID)
+                        self.send_message(self.get_message("help"),fromUserID,1) 
                     else:
-                        self.send_message(self.get_message("wrong_url_command"), fromUserID, 1)
-                        print("Invalid command format. Use: add <name> <url>")
+                            try:
+                                station_number = int(msg.lower())     
+                                radio_urls = stations.Radio.radio_urls
+                                custom_station_number = str(len(radio_urls) + 1)
+                                
+                                if str(station_number) == custom_station_number:   
+                                
+                                    importlib.reload(radio_user)
+                                    # Access the latest value
+                                    custom_radio_url = radio_user.custom_radio_url
+                                    custom_radio_name = radio_user.custom_radio_name
+                                    
+                                    try:
+                                        if self.linux():
+                                            self.ff.stop()
+                                        else:    
+                                            self.vlc.stop()  # Stop any existing playback
+                                        self.vlc.play_url(custom_radio_url)
+                                        self.enable_voice_transmission()
+                                        self.tt.doChangeStatus(0, ttstr(f"Станция - {custom_radio_name}. \"h\" справка. "))
+                                    
+                                    except Exception as e:  # Catch potential errors
+                                        logging.error(f"Error playing radio: {e}")
+                                
+                                elif 1 <= station_number <= len(stations.Radio.radio_urls):  # Check if valid number
+                                    self.play_radio(str(station_number))  # Convert back to string
+                                            
+                            except ValueError:
+                            # Handle cases where the message isn't a number
+                                pass       
+                                    
+                    if msg.lower()[:3] == "add":
+                    
+                        # Extracting name and URL from the message using regex
+                        match = re.match(r'add\s+(\w+)\s+(https?://\S+)', msg, re.IGNORECASE)
 
-                # Check for volume command first
-                elif msg.lower().startswith("v") and len(msg) > 1:  # Check for at least one digit after "v"
-                    try:
-                        volume_level = int(msg[1:])  # Extract digits after "v"
-                        if 0 <= volume_level <= conf.max_volume:
-                            if self.linux():
-                                self.ff.set_volume(volume_level)
-                            else:
-                                self.vlc.set_volume(volume_level)
-                            self.send_message(f"{self.get_message('vol_set_to')}  {volume_level}", fromUserID, 2)
+                        if match:
+                            name = match.group(1)  # Extracting the name
+                            url = match.group(2)   # Extracting the URL
+
+                            try:
+                                response = requests.head(url)
+                                if response.status_code in [200, 301]:
+                                    print("URL is valid and returns 200 or 301 status code.")
+
+                                    try:
+                                        # Ensure the correct path to radio_user.py
+                                        radio_user_path = os.path.join(os.path.dirname(__file__), 'radio_user.py')
+                                        print(f"Writing to {radio_user_path}")
+
+                                        # Open the 'radio_user.py' file for writing
+                                        with open(radio_user_path, 'w') as file:
+                                            file.write(f'custom_radio_url = "{url}"\n')
+                                            name = name[:10]
+                                            file.write(f'custom_radio_name = "{name}"\n')
+
+                                        self.send_message(self.get_message("add_url"), fromUserID, 1)
+                                        print("New radio URL and name added to the radio_user.py file.")
+                                        
+                                        # Reload stations to include the new custom radio
+                                        importlib.reload(stations)
+                                        
+                                        # Debug: Print new values
+                                        import radio_user
+                                        print(f"Updated custom_radio_url: {radio_user.custom_radio_url}")
+                                        print(f"Updated custom_radio_name: {radio_user.custom_radio_name}")
+
+                                    except Exception as e:
+                                        self.send_message(f"Error writing to file: {e}", fromUserID, 1)
+                                        print(f"Error writing to file: {e}")
+                                else:
+                                    self.send_message("URL does not return 200 or 301 status code.", fromUserID, 1)
+                                    print("URL does not return 200 or 301 status code.")
+
+                            except requests.exceptions.RequestException as e:
+                                self.send_message(self.get_message("wrong_url"), fromUserID, 1)
+                                print(f"Error checking URL: {e}")
+                                
                         else:
-                            self.send_message(self.get_message("wrong_volume"), fromUserID, 1)
-                    except ValueError:
-                        self.send_message((self.get_message("wrong_volume_format")), fromUserID, 1)                 
-            
-                elif msg.lower() == "q":
-                    self.radio_stop()
-                    self.quit(fromUserID,fromUserName, msg)
-       
-            else:
-                #Error - only administrators can operate this bot
-                self.send_message(self.get_message("error_only_admin"), fromUserID, 1)
-               
+                            self.send_message(self.get_message("wrong_url_command"), fromUserID, 1)
+                            print("Invalid command format. Use: add <name> <url>")
+
+                    # Check for volume command first
+                    elif msg.lower().startswith("v") and len(msg) > 1:  # Check for at least one digit after "v"
+                        try:
+                            volume_level = int(msg[1:])  # Extract digits after "v"
+                            if 0 <= volume_level <= conf.max_volume:
+                                if self.linux():
+                                    self.ff.set_volume(volume_level)
+                                else:
+                                    self.vlc.set_volume(volume_level)
+                                self.send_message(f"{self.get_message('vol_set_to')}  {volume_level}", fromUserID, 2)
+                            else:
+                                self.send_message(self.get_message("wrong_volume"), fromUserID, 1)
+                        except ValueError:
+                            self.send_message((self.get_message("wrong_volume_format")), fromUserID, 1)                 
+                
+                    elif msg.lower() == "q":
+                        self.radio_stop()
+                        self.quit(fromUserID,fromUserName, msg)
+        
+                else:
+                    #Error - only administrators can operate this bot
+                    self.send_message(self.get_message("error_only_admin"), fromUserID, 1)
+                
          
     def defaultAudioDevices(self):
         msg = "\n\nDefault Audio Input Devices:\n"

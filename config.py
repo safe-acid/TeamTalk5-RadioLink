@@ -1,6 +1,6 @@
 class Config:
     #Version
-    version = "1.1"
+    version = "1.2"
     sdk = "SDK 5.15a"
     
     #Server settings
@@ -19,7 +19,9 @@ class Config:
     #Max default volume - INT     
     max_volume = 50 
     #Only admin can operaate this bot - Boolean        
-    admin = False          
+    admin = False    
+    #Time in seconds to prevent message flood
+    msgTimeDelay = 5      
 
 
     #Example

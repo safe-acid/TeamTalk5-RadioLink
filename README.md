@@ -52,12 +52,11 @@ The default langauge is English, if you want to run on Russian use command
 python radio.py --language ru
 ```
 
-### Release notes version:
-1.0 - initial release
 
-1.1 - added ffmpeg player
+# Running the bot as service
 
-Telegram - <a href="https://t.me/TT5RadioLink"> TT5RadioLink</a>
+
+Telegram - <a href="https://t.me/TT5Link"> TT5RadioLink</a>
 
 Good Luck:
 Котяра 🐾

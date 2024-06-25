@@ -56,7 +56,7 @@ python radio.py --language ru
 # Running the bot as service
 
 
-Telegram - <a href="https://t.me/TT5Link"> TT5RadioLink</a>
+Telegram - <a href="https://t.me/TT5Link"> TT5Link</a>
 
 Good Luck:
 Котяра 🐾

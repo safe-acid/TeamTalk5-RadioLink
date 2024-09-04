@@ -185,8 +185,8 @@ class TTClient:
             self.onUserMessage(message.nFromUserID, message.szFromUsername, message.szMessage)
         if msgType == TeamTalk5.TextMsgType.MSGTYPE_CHANNEL:
             self.onChannelMessage(message.nFromUserID, message.szFromUsername, message.nChannelID, message.szMessage)
-        if msgType == TeamTalk5.TextMsgType.MSGTYPE_BROADCAST:
-            self.onBroadcastMessage(message.nFromUserID, message.szFromUsername, message.szMessage)  
+        #if msgType == TeamTalk5.TextMsgType.MSGTYPE_BROADCAST:
+            #self.onBroadcastMessage(message.nFromUserID, message.szFromUsername, message.szMessage)  
     
     #grabbing users in channels
     def get_users_in_channels(self):

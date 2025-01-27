@@ -1,0 +1,16 @@
+[Unit]
+Description=Run Radio bot user:user1
+After=network.target pulseaudio.service
+Requires=pulseaudio.service
+
+[Service]
+User=user1
+WorkingDirectory=/home/user1/TeamTalk5-RadioLink
+ExecStart=/bin/bash -c "source /home/user1/TeamTalk5-RadioLink/.env/bin/activate && python3 /home/user1/TeamTalk5-RadioLink/radio.py"
+Restart=always
+RestartSec=5
+#StandardOutput=journal
+#StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

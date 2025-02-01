@@ -1,23 +1,33 @@
 class Config:
     #Version
-    version = "1.2"
+    version = "1.3"
     sdk = "SDK 5.15a"
     
     #Server settings
-    host = ""
-    tcpPort = 10555
-    udpPort = 10555
+    host = "tt5.live"
+    tcpPort = 10333
+    udpPort = 10333
     botName = ""
     username = ""
     password = ""
     ChannelName = "/"
     ChannelPassword = ""
+
+    #Personal use // ignore below
+    #ChannelName = "/! Xвосты без дела ✨"
+    #ChannelName = "/!Jazz Cafe🎷"
+    #ChannelName = "/!Small talk📚"
+    #ChannelName = "/!White Panther🤍"
+    #ChannelName = "/!Борщ 🥣"
+    #ChannelName = "/!Дворец принцессы"
+    #ChannelName = "/мур-мяу😍"
+    
     
     #Other settings
     #Audio Device ID - INT 
-    audioInputID = 0 
+    audioInputID = 6
     #Max default volume - INT     
-    max_volume = 50 
+    max_volume = 100 
     #Only admin can operaate this bot - Boolean        
     admin = False    
     #Time in seconds to prevent message flood

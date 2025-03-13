@@ -14,6 +14,7 @@ class Config:
     ChannelPassword = ""
 
     #Personal use // ignore below
+    #! Хорошее Настроение
     #ChannelName = "/! Xвосты без дела ✨"
     #ChannelName = "/!Jazz Cafe🎷"
     #ChannelName = "/!Small talk📚"

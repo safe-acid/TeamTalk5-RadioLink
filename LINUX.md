@@ -114,4 +114,38 @@ nano config.py
 python3 radio.py
 ```
 
+Imoroving the cache 
+
+sudo nano /etc/systemd/system/clear-cache.service
+### clear-cache.service
+```shell script
+[Unit]
+Description=Clear Linux RAM Cache
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash -c "sync; echo 3 > /proc/sys/vm/drop_caches"
+```
+sudo nano /etc/systemd/system/clear-cache.timer
+
+
+### clear-cache.timer
+```shell script
+[Unit]
+Description=Run Clear Cache every 2 hours
+
+[Timer]
+OnBootSec=10min
+OnUnitActiveSec=2h
+Unit=clear-cache.service
+
+[Install]
+WantedBy=timers.target
+
+```
+
+sudo systemctl daemon-reload
+
+sudo systemctl enable --now clear-cache.timer
+
 Good Luck: Котяра 🐾

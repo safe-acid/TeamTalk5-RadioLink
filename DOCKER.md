@@ -10,3 +10,4 @@ docker compose up -d --build
 ## 3.Check logs
 ```shell script
 docker compose logs -f radiolink
+```

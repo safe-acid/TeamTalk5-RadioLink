@@ -1,27 +1,17 @@
 class Config:
     #Version
-    version = "1.3"
-    sdk = "SDK 5.15a"
+    version = "2.0"
+    sdk = "SDK 5.19a"
     
     #Server settings
     host = "tt5.live"
     tcpPort = 10333
     udpPort = 10333
-    botName = ""
+    botName = "@Radio_docker"
     username = ""
     password = ""
     ChannelName = "/"
     ChannelPassword = ""
-
-    #Personal use // ignore below
-    #! Хорошее Настроение
-    #ChannelName = "/! Xвосты без дела ✨"
-    #ChannelName = "/!Jazz Cafe🎷"
-    #ChannelName = "/!Small talk📚"
-    #ChannelName = "/!White Panther🤍"
-    #ChannelName = "/!Борщ 🥣"
-    #ChannelName = "/!Дворец принцессы"
-    #ChannelName = "/мур-мяу😍"
     
     
     #Other settings
@@ -35,15 +25,12 @@ class Config:
     msgTimeDelay = 5      
 
 
-    #Example
-    # host = "46.89.217.170"
-    # tcpPort = 10333
-    # udpPort = 10333
-    # botName = "_radioFM"
-    # username = "open"
-    # password = "open"
-    # ChannelName = "/_Audio bot"
-    # #ChannelPassword = "1112"
-    # ChannelPassword = "private"
-    # audioInputID = 6
-    # max_volume = 50
+
+    #Personal use // ignore below
+    #! Хорошее Настроение
+    #ChannelName = "/! Xвосты без дела ✨"
+    #ChannelName = "/!Jazz Cafe🎷"
+    #ChannelName = "/!Small talk📚"
+    #ChannelName = "/!White Panther🤍"
+    #ChannelName = "/!Борщ 🥣"
+    #ChannelName = "/мур-мяу😍"

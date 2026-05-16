@@ -35,6 +35,9 @@ pactl load-module module-null-sink sink_name="${AUDIO_SINK_NAME:-Source}" \
 pactl load-module module-virtual-source source_name="${AUDIO_SOURCE_NAME:-VirtualMic}" \
   master="${AUDIO_MASTER:-Source.monitor}" >/dev/null
 
+pactl set-default-sink "${AUDIO_SINK_NAME:-Source}" || true
+pactl set-default-source "${AUDIO_SOURCE_NAME:-VirtualMic}" || true
+
 echo "[audio] sinks:";   pactl list short sinks   || true
 echo "[audio] sources:"; pactl list short sources || true
 

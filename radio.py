@@ -56,16 +56,15 @@ class TTClient:
         self.tt.onCmdUserTextMessage = self.onCmdUserTextMessage
         self.connected = False   # Flag to track connection status
         self.reconnect_delay =  10 # Set reconnect interval to 10 seconds
-        self.reconnect_thread = threading.Thread(target=self.reconnect_loop, daemon=True)
-        self.reconnect_thread.start()
+        self.reconnect_thread = None
+        self.reconnect_lock = threading.Lock()
         self.vlc = VLCPlayer()
         self.ff = FFmpegPlayer()      
         self.admin = conf.admin  # Initialize the admin flag
         self.last_message_time = defaultdict(lambda: 0)  # Track last message time for each user
         
     def linux(self):
-        if system == "Linux":
-            return True
+        return system == "Linux"
             
         
     def play_radio(self, radio_choice):
@@ -77,10 +76,8 @@ class TTClient:
                self.enable_voice_transmission()
                time.sleep(0.5)
                if self.linux():
-                    self.ff.stop()
                     self.ff.play(url)
                else:
-                    self.vlc.stop()  # Stop any existing playback
                     self.vlc.play_url(url)      
                
             except Exception as e:  # Catch potential errors
@@ -90,7 +87,8 @@ class TTClient:
             radio_names = stations.Radio.radio_names
             if radio_choice in radio_names:
                 radio_name = radio_names[radio_choice]
-                self.tt.doChangeStatus(0, ttstr(f"{self.get_message('station')} - {radio_name}. {self.get_message('info')}"))
+                station_number = int(radio_choice)
+                self.tt.doChangeStatus(0, ttstr(f"{self.get_message('station')} {station_number:02d} - {radio_name}. {self.get_message('info')}"))
    
             
     def radio_stop(self):
@@ -109,9 +107,13 @@ class TTClient:
     
     def start(self):
         self.connect()
+        if self.reconnect_thread is None:
+            self.reconnect_thread = threading.Thread(target=self.reconnect_loop, daemon=True)
+            self.reconnect_thread.start()
                    
     def connect(self):
-        self.tt.connect(self.host, self.tcpPort, self.udpPort)
+        with self.reconnect_lock:
+            self.tt.connect(self.host, self.tcpPort, self.udpPort)
 
     def onConnectSuccess(self):
         self.connected = True #Connection established
@@ -119,9 +121,8 @@ class TTClient:
         time.sleep(1)
               
     def onConnectionLost(self):
-        self.radio_stop()
-        self.connect()
         self.connected = False
+        self.radio_stop()
         logger.info("Connection lost.")
         
     def set_input_device(self, id: int) -> None:
@@ -167,9 +168,9 @@ class TTClient:
         while True:   
                 if not self.connected:
                     logger.info("Attempting to reconnect...")
-                    self.tt.disconnect()
+                    with self.reconnect_lock:
+                        self.tt.disconnect()
                     time.sleep(2)
-                # Attempt to reconnect
                     self.connect()
                 time.sleep(self.reconnect_delay)  
     
@@ -242,7 +243,7 @@ class TTClient:
         importlib.reload(stations)
         message_lines = [self.get_message("help_top")]  # help message header
         for number, name in stations.Radio.radio_names.items():
-            message_lines.append(f"{number}: {name}")  # Build each line
+            message_lines.append(f"{int(number):02d}.{name}")  # Build each line
         message = "\n".join(message_lines) 
         self.send_message(message, fromUserID, 1)  
         
@@ -282,12 +283,11 @@ class TTClient:
                                     
                                     try:
                                         if self.linux():
-                                            self.ff.stop()
+                                            self.ff.play(custom_radio_url)
                                         else:    
-                                            self.vlc.stop()  # Stop any existing playback
-                                        self.vlc.play_url(custom_radio_url)
+                                            self.vlc.play_url(custom_radio_url)
                                         self.enable_voice_transmission()
-                                        self.tt.doChangeStatus(0, ttstr(f"Станция - {custom_radio_name}. \"h\" справка. "))
+                                        self.tt.doChangeStatus(0, ttstr(f"Станция {station_number:02d} - {custom_radio_name}. \"h\" справка. "))
                                     
                                     except Exception as e:  # Catch potential errors
                                         logging.error(f"Error playing radio: {e}")
@@ -309,7 +309,7 @@ class TTClient:
                             url = match.group(2)   # Extracting the URL
 
                             try:
-                                response = requests.head(url)
+                                response = requests.head(url, allow_redirects=True, timeout=5)
                                 if response.status_code in [200, 301]:
                                     print("URL is valid and returns 200 or 301 status code.")
 

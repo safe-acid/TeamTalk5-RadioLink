@@ -1,6 +1,6 @@
 class Config:
     #Version
-    version = "2.1"
+    version = "2.2"
     sdk = "SDK 5.19a"
     
     #Server settings
@@ -12,6 +12,7 @@ class Config:
     password = ""
     ChannelName = "/"
     ChannelPassword = ""
+    radio_nick_icons = ["🐳", "⚡", "📻", "🎙️", "🎶", "🔊", "❤️", "⭐️", "🎲", "✨"]
     
     
     #Other settings

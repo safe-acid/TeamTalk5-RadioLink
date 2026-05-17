@@ -1,4 +1,4 @@
-import sys, os, platform, ctypes, logging, time, threading, argparse, importlib, re, requests
+import sys, os, platform, ctypes, logging, time, threading, argparse, importlib, re, requests, random
 import stations, radio_user
 from config import Config as conf
 from typing import Optional
@@ -65,6 +65,20 @@ class TTClient:
         
     def linux(self):
         return system == "Linux"
+
+    def random_radio_nick(self):
+        icons = getattr(conf, "radio_nick_icons", [])
+        if not icons:
+            return conf.botName
+
+        base_name = conf.botName
+        for icon in icons:
+            suffix = f" {icon}"
+            if base_name.endswith(suffix):
+                base_name = base_name[:-len(suffix)]
+                break
+
+        return f"{base_name} {random.choice(icons)}"
             
         
     def play_radio(self, radio_choice):
@@ -73,6 +87,7 @@ class TTClient:
         if radio_choice in radio_urls:
             url = radio_urls[radio_choice]
             try:
+               self.change_nickname(self.random_radio_nick())
                self.enable_voice_transmission()
                time.sleep(0.5)
                if self.linux():
@@ -282,6 +297,7 @@ class TTClient:
                                     custom_radio_name = radio_user.custom_radio_name
                                     
                                     try:
+                                        self.change_nickname(self.random_radio_nick())
                                         if self.linux():
                                             self.ff.play(custom_radio_url)
                                         else:    

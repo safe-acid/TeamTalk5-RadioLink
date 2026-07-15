@@ -132,7 +132,7 @@ class TTClient:
 
     def onConnectSuccess(self):
         self.connected = True #Connection established
-        self.tt.doLogin(self.nickName, self.userName, self.password, ttstr("radio bot"), 0)
+        self.tt.doLogin(self.nickName, self.userName, self.password, ttstr("🐾 radio bot"))
         time.sleep(1)
               
     def onConnectionLost(self):

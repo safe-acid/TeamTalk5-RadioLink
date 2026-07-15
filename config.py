@@ -1,14 +1,14 @@
 class Config:
     #Version
-    version = "2.2"
-    sdk = "SDK 5.19a"
+    version = "2.3"
+    sdk = "SDK 5.22a"
     
     #Server settings
     host = "tt5.live"
     tcpPort = 10333
     udpPort = 10333
     botName = "@RadioFM 🐳"
-    username = ""
+    username = "@radio"
     password = ""
     ChannelName = "/"
     ChannelPassword = ""
@@ -29,15 +29,4 @@ class Config:
     #Only admin can operaate this bot - Boolean        
     admin = False    
     #Time in seconds to prevent message flood
-    msgTimeDelay = 5      
-
-
-
-    #Personal use // ignore below
-    #! Хорошее Настроение
-    #ChannelName = "/! Xвосты без дела ✨"
-    #ChannelName = "/!Jazz Cafe🎷"
-    #ChannelName = "/!Small talk📚"
-    #ChannelName = "/!White Panther🤍"
-    #ChannelName = "/!Борщ 🥣"
-    #ChannelName = "/мур-мяу😍"
+    msgTimeDelay = 1

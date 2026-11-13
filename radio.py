@@ -128,7 +128,7 @@ class TTClient:
                    
     def connect(self):
         with self.reconnect_lock:
-            self.tt.connect(self.host, self.tcpPort, self.udpPort)
+            self.tt.connect(self.host, self.tcpPort, self.udpPort, bEncrypted=conf.useTLS)
 
     def onConnectSuccess(self):
         self.connected = True #Connection established

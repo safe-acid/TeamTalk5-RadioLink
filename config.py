@@ -1,6 +1,6 @@
 class Config:
     #Version
-    version = "2.3"
+    version = "2.4"
     sdk = "SDK 5.22a"
     
     #Server settings
@@ -12,6 +12,7 @@ class Config:
     password = ""
     ChannelName = "/"
     ChannelPassword = ""
+    useTLS = False #use encrypted server
     radio_nick_icons = ["🐳", "⚡", "📻", "🎙️", "🎶", "🔊", "❤️", "⭐️", "🎲", "✨"]
     
     

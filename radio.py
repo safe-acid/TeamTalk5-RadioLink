@@ -1,4 +1,4 @@
-import sys, os, platform, ctypes, logging, time, threading, argparse, importlib, re, requests, random
+import sys, os, platform, ctypes, logging, time, argparse, importlib, re, requests, random
 import stations, radio_user
 from config import Config as conf
 from typing import Optional
@@ -52,12 +52,13 @@ class TTClient:
         self.tt = TeamTalk5.TeamTalk()
         self.tt.onConnectSuccess = self.onConnectSuccess
         self.tt.onConnectionLost = self.onConnectionLost
+        self.tt.onConnectFailed = self.onConnectFailed
+        self.tt.onConnectCryptError = self.onConnectCryptError
         self.tt.onCmdMyselfLoggedIn = self.onCmdMyselfLoggedIn
         self.tt.onCmdUserTextMessage = self.onCmdUserTextMessage
-        self.connected = False   # Flag to track connection status
-        self.reconnect_delay =  10 # Set reconnect interval to 10 seconds
-        self.reconnect_thread = None
-        self.reconnect_lock = threading.Lock()
+        self.reconnect_delay = 10
+        self.connect_timeout = 30
+        self.retry_at = None
         self.vlc = VLCPlayer()
         self.ff = FFmpegPlayer()      
         self.admin = conf.admin  # Initialize the admin flag
@@ -122,24 +123,37 @@ class TTClient:
     
     def start(self):
         self.connect()
-        if self.reconnect_thread is None:
-            self.reconnect_thread = threading.Thread(target=self.reconnect_loop, daemon=True)
-            self.reconnect_thread.start()
-                   
+        while True:
+            self.tt.runEventLoop(250)
+            if self.retry_at is not None and time.monotonic() >= self.retry_at:
+                logger.info("Attempting to reconnect...")
+                self.tt.disconnect()
+                self.connect()
+
     def connect(self):
-        with self.reconnect_lock:
-            self.tt.connect(self.host, self.tcpPort, self.udpPort, bEncrypted=conf.useTLS)
+        if self.tt.connect(self.host, self.tcpPort, self.udpPort, bEncrypted=conf.useTLS):
+            self.retry_at = time.monotonic() + self.connect_timeout
+        else:
+            self.onConnectFailed()
 
     def onConnectSuccess(self):
-        self.connected = True #Connection established
+        self.retry_at = None
         self.tt.doLogin(self.nickName, self.userName, self.password, ttstr("🐾 radio bot"))
         time.sleep(1)
-              
+
+    def onConnectFailed(self):
+        logger.warning("TeamTalk connection failed.")
+        self.retry_at = time.monotonic() + self.reconnect_delay
+
+    def onConnectCryptError(self, error):
+        logger.warning("TeamTalk TLS error: %s", error.szErrorMsg)
+        self.retry_at = time.monotonic() + self.reconnect_delay
+
     def onConnectionLost(self):
-        self.connected = False
+        self.retry_at = time.monotonic() + self.reconnect_delay
         self.radio_stop()
         logger.info("Connection lost.")
-        
+
     def set_input_device(self, id: int) -> None:
         self.tt.initSoundInputDevice(id)   
     
@@ -179,16 +193,6 @@ class TTClient:
         self.tt.doChangeStatus(0, ttstr(self.get_message("info")))     
         self.set_input_device(conf.audioInputID)
 
-    def reconnect_loop(self):
-        while True:   
-                if not self.connected:
-                    logger.info("Attempting to reconnect...")
-                    with self.reconnect_lock:
-                        self.tt.disconnect()
-                    time.sleep(2)
-                    self.connect()
-                time.sleep(self.reconnect_delay)  
-    
     def onChannelMessage(self, fromUserID, fromUserName, channelID, msgText):
          print(f"Channel message in channelid {ttstr(channelID)} from userid {ttstr(fromUserID)} username: {ttstr(fromUserName)} {ttstr(msgText)}")
 
@@ -425,8 +429,6 @@ if __name__ == "__main__":
             # Start the TeamTalk client if not displaying devices
             time.sleep(1.5)
             ttClient.start()
-            while True:
-                ttClient.tt.runEventLoop()
                 
     except KeyboardInterrupt:
         running = False
